@@ -170,12 +170,15 @@ Rectangle {
                     Rectangle {
                         width: 35
                         height: 35
-                        color: "white"
+                        color: "#522F2F"
+                        radius: 50
                         anchors.right: parent.right
                         anchors.rightMargin: 10
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        radius: 50
+                        anchors.verticalCenter: parent.verticalCenter
+
+
                     }
+
                 }
 
                 contentItem: Text {
