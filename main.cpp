@@ -11,13 +11,17 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
     QCoreApplication::setOrganizationName("Unreallx.foundation");
     QCoreApplication::setOrganizationDomain("github-iUnreallx.com");
     QCoreApplication::setApplicationName("Obd2-Emulator");
+
     SerialPortScanner comPort;
     engine.rootContext()->setContextProperty("comPort", &comPort);
+
     SerialPortConnector comConnector;
     engine.rootContext()->setContextProperty("comConnector", &comConnector);
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
