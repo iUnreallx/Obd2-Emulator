@@ -152,11 +152,10 @@ Rectangle {
                 anchors.topMargin: 105
                 width: parent.width - 74
                 height: 50
-                model: comPort.availablePorts.length > 0
-                                   ? comPort.availablePorts
-                                   : ["Нет доступных портов"]
 
-                enabled: comPort.availablePorts.length > 0
+                model: comPort.availablePorts.length > 0
+                       ? comPort.availablePorts
+                       : ["Нет доступных портов"]
 
                 property color normalColor: "#2E1F1F"
                 property color activeColor: "#261818"
@@ -166,19 +165,44 @@ Rectangle {
                     color: comPortComboBox.hovered || comPortComboBox.popup.visible
                            ? comPortComboBox.activeColor
                            : comPortComboBox.normalColor
+                }
 
-                    Rectangle {
-                        width: 35
-                        height: 35
-                        color: "#522F2F"
-                        radius: 50
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        anchors.verticalCenter: parent.verticalCenter
+                Rectangle {
+                    id: reloadButton
+                    width: 35
+                    height: 35
+                    color: "transparent"
+                    radius: 50
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    z: 2
 
-
+                    Image {
+                        anchors.centerIn: parent
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        source: "assets/ui/reload.png"
                     }
 
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            comPort.scanPorts()
+                        }
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton
+                    onPressed: {
+                        if (comPort.availablePorts.length > 0) {
+                            comPortComboBox.popup.open()
+                        }
+                    }
+                    z: 1
                 }
 
                 contentItem: Text {
@@ -189,7 +213,7 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     text: comPortComboBox.currentText
                     color: "white"
-                    opacity: comPort.availablePorts.length > 0 ? 1 : 0.6
+                    opacity: comPort.availablePorts.length > 0 ? 1 : 0.5
                     font.bold: true
                     font.pixelSize: 26
                 }
@@ -199,11 +223,7 @@ Rectangle {
                 delegate: ItemDelegate {
                     width: comPortComboBox.width
                     height: 40
-
-                    background: Rectangle {
-                        color: "transparent"
-                    }
-
+                    background: Rectangle { color: "transparent" }
                     contentItem: Text {
                         anchors.centerIn: parent
                         text: modelData
@@ -220,12 +240,10 @@ Rectangle {
                     clip: true
                     focus: true
                     height: Math.min(contentHeight, 390)
-
                     background: Rectangle {
                         radius: 25
                         color: comPortComboBox.activeColor
                     }
-
                     contentItem: ListView {
                         clip: true
                         anchors.top: parent.top
@@ -241,22 +259,23 @@ Rectangle {
                 onCurrentTextChanged: {
                     if (currentText !== "" && currentText !== "Нет доступных портов") {
                         if (comConnector.openPort(currentText)) {
-                            console.log("Port opened successfully:", currentText);
+                            console.log("Port opened successfully:", currentText)
                         } else {
-                            console.log("Failed to open port:", currentText);
+                            console.log("Failed to open port:", currentText)
                         }
                     }
                 }
-            }
 
-            Connections {
-                target: comPort
-                function onAvailablePortsChanged() {
-                    console.log("Ports updated:", comPort.availablePorts);
+                Connections {
+                    target: comPort
+                    function onAvailablePortsChanged() {
+                        comPortComboBox.model = comPort.availablePorts.length > 0
+                                                ? comPort.availablePorts
+                                                : ["Нет доступных портов"]
+                    }
                 }
             }
-
-            }
+        }
     }
 
 
