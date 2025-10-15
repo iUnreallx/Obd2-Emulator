@@ -19,8 +19,6 @@ public:
 
     Q_INVOKABLE void changeSpeedToOBD(int speed);
 
-signals:
-    void dataReceived(const QByteArray &data);
 
 private:
     QThread *workerThread;
