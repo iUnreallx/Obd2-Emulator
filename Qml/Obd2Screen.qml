@@ -205,6 +205,46 @@ Rectangle {
                     z: 1
                 }
 
+
+                Rectangle {
+                    id: terminalButton
+                    width: 50
+                    height: 45
+                    color: "transparent"
+                    radius: 50
+                    anchors.right: parent.right
+                    anchors.rightMargin: 45
+                    anchors.verticalCenter: parent.verticalCenter
+                    z: 2
+
+                    Image {
+                        anchors.centerIn: parent
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        source: "assets/ui/terminal.png"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            console.log("clicked terminal Obd2Screen")
+                        }
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton
+                    onPressed: {
+                        if (comPort.availablePorts.length > 0) {
+                            comPortComboBox.popup.open()
+                        }
+                    }
+                    z: 1
+                }
+
+
                 contentItem: Text {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
