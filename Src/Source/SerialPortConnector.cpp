@@ -43,11 +43,6 @@ void SerialPortConnector::closePort()
     QMetaObject::invokeMethod(worker, "closePort", Qt::QueuedConnection);
 }
 
-bool SerialPortConnector::isPortOpen() const
-{
-    return true;
-}
-
 void SerialPortConnector::changeSpeedToOBD(int speed)
 {
     QMetaObject::invokeMethod(worker, "changeSpeedToOBD", Qt::QueuedConnection, Q_ARG(int, speed));
