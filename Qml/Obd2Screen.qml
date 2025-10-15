@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.15
 import QtQuick.Shapes 1.0
 import "Speedometers" as Speedometers
 
+
 Rectangle {
     id: mainpage
     anchors.fill: parent
@@ -35,8 +36,6 @@ Rectangle {
         speedMax: 15000
     }
 
-
-
     Rectangle{
         anchors.top: parent.top
         anchors.right: parent.right
@@ -63,13 +62,13 @@ Rectangle {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             onClicked: {
+                comPort.scanPorts()
+
                 emulatorSettings.open()
                 root.isOverlayVisible = true
             }
         }
     }
-
-
 
     Popup {
         id: emulatorSettings
@@ -82,6 +81,7 @@ Rectangle {
         clip: true
 
         onClosed: {
+            comPort.clearPorts()
             root.isOverlayVisible = false;
         }
 
@@ -143,8 +143,6 @@ Rectangle {
                 font.bold: true
                 color: "white"
             }
-
-
             ComboBox {
                 id: comPortComboBox
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -152,21 +150,32 @@ Rectangle {
                 anchors.topMargin: 105
                 width: parent.width - 74
                 height: 50
-                model: comPort.availablePorts
+                model: ["X", "Y", "5", "X", "Y", "5", "X", "Y", "5", "X", "Y", "5"]
+                z: 2
+
+                enabled: comPort.availablePorts.length > 0
+
+                property color normalColor: "#2E1F1F"
+                property color activeColor: "#261818"
 
                 background: Rectangle {
-                    color: "#2E1F1F"
-                    radius: 10
+                    radius: 25
+                    color: comPortComboBox.hovered || comPortComboBox.popup.visible
+                           ? comPortComboBox.activeColor
+                           : comPortComboBox.normalColor
                 }
 
                 contentItem: Text {
-                    anchors.centerIn: parent
-                    horizontalAlignment: Text.AlignHCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignVCenter
                     text: comPortComboBox.currentText
                     color: "white"
                     font.bold: true
                     font.pixelSize: 26
+                    z: 5
                 }
 
                 indicator: Item {}
@@ -189,68 +198,56 @@ Rectangle {
                 }
 
                 popup: Popup {
-                    y: comPortComboBox.height - 7
+                    y: comPortComboBox.height - 20
                     width: comPortComboBox.width
                     implicitHeight: contentItem.implicitHeight
                     padding: 0
                     clip: true
                     focus: true
-
-                    height: Math.min(contentHeight, 345)
+                    height: Math.min(contentHeight, 360)
 
                     background: Shape {
                         id: popupBg
 
                         ShapePath {
-                            fillColor: "#2E1F1F"
+                            fillColor: comPortComboBox.activeColor
                             strokeWidth: 0
                             strokeColor: "transparent"
 
                             startX: 0
                             startY: 0
 
-                            PathLine {
-                                x: popupBg.width
-                                y: 0
-                            }
-
-                            PathLine {
-                                x: popupBg.width
-                                y: popupBg.height - 10
-                            }
+                            PathLine { x: popupBg.width; y: 0 }
+                            PathLine { x: popupBg.width; y: popupBg.height - 10 }
 
                             PathArc {
                                 x: popupBg.width - 10
                                 y: popupBg.height
-                                radiusX: 10
-                                radiusY: 10
+                                radiusX: 25
+                                radiusY: 25
                                 direction: PathArc.Clockwise
                                 useLargeArc: false
                             }
 
-                            PathLine {
-                                x: 15
-                                y: popupBg.height
-                            }
+                            PathLine { x: 15; y: popupBg.height }
 
                             PathArc {
                                 x: 0
                                 y: popupBg.height - 10
-                                radiusX: 10
-                                radiusY: 10
+                                radiusX: 25
+                                radiusY: 25
                                 direction: PathArc.Clockwise
                                 useLargeArc: false
                             }
 
-                            PathLine {
-                                x: 0
-                                y: 0
-                            }
+                            PathLine { x: 0; y: 0 }
                         }
                     }
 
                     contentItem: ListView {
                         clip: true
+                        anchors.top: parent.top
+                        anchors.topMargin: 10
                         implicitHeight: contentHeight
                         model: comPortComboBox.popup.visible ? comPortComboBox.delegateModel : null
                         currentIndex: comPortComboBox.highlightedIndex
@@ -259,9 +256,8 @@ Rectangle {
                     }
                 }
 
-
                 onCurrentTextChanged: {
-                    if (currentText !== "") {
+                    if (currentText !== "" && currentText !== "Нет доступных портов") {
                         if (comConnector.openPort(currentText)) {
                             console.log("Port opened successfully:", currentText);
                         } else {
@@ -271,13 +267,14 @@ Rectangle {
                 }
             }
 
-            Connections {
-                target: comPort
-                function onAvailablePortsChanged() {
-                    console.log("Ports updated:", comPort.availablePorts);
+
+                Connections {
+                    target: comPort
+                    function onAvailablePortsChanged() {
+                        console.log("Ports updated:", comPort.availablePorts);
+                    }
                 }
             }
-        }
     }
 
 
