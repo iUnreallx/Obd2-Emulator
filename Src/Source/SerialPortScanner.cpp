@@ -20,8 +20,6 @@ void SerialPortScanner::scanPorts()
     QtConcurrent::run([this]() { scanPortsInBackground(); });
 }
 
-
-
 void SerialPortScanner::scanPortsInBackground()
 {
     QStringList newPorts;

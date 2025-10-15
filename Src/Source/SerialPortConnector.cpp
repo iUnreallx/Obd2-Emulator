@@ -9,10 +9,6 @@ SerialPortConnector::SerialPortConnector(QObject *parent)
 {
     worker->moveToThread(workerThread);
 
-    connect(this, &SerialPortConnector::dataReceived, this, [] (const QByteArray &data) {
-        qDebug() << "общий поток получил данные формата :" << data;
-    });
-    connect(worker, &SerialPortWorker::dataReceived, this, &SerialPortConnector::dataReceived);
     connect(worker, &SerialPortWorker::errorOccurred, this, [] (const QString &error) {
         qDebug() << "Error:" << error;
     });
