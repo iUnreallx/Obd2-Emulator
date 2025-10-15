@@ -20,6 +20,8 @@ void SerialPortScanner::scanPorts()
     QtConcurrent::run([this]() { scanPortsInBackground(); });
 }
 
+
+
 void SerialPortScanner::scanPortsInBackground()
 {
     QStringList newPorts;
@@ -34,6 +36,19 @@ void SerialPortScanner::scanPortsInBackground()
 
         QMetaObject::invokeMethod(this, [this]() {
             emit availablePortsChanged();
+            if (m_availablePorts.isEmpty()) {
+                emit noPortsAvailable();
+            }
         }, Qt::QueuedConnection);
     }
 }
+
+
+void SerialPortScanner::clearPorts()
+{
+    if (!m_availablePorts.isEmpty()) {
+        m_availablePorts.clear();
+        emit availablePortsChanged();
+    }
+}
+

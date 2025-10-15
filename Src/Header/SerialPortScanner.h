@@ -15,9 +15,11 @@ public:
 
     QStringList availablePorts() const;
     Q_INVOKABLE void scanPorts();
+    Q_INVOKABLE void clearPorts();
 
 signals:
     void availablePortsChanged();
+    void noPortsAvailable();
 
 private:
     void scanPortsInBackground();
