@@ -46,6 +46,7 @@ qt_add_qml_module(appObd2-Emulator
         Qml/assets/ui/power.png
         Qml/assets/ui/temp.png
         Qml/assets/ui/reload.png
+        Qml/assets/ui/terminal.png
 
         Qml/assets/circle.png
         boxblur.frag
