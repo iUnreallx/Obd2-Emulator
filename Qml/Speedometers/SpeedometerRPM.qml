@@ -7,7 +7,7 @@ Item {
     width: 300
     height: 300
 
-    property real speed: 0
+    property real rpm: 0
     property real speedMin: 0
     property real speedMax: 15000
     property real angleStart: 135
@@ -20,8 +20,9 @@ Item {
         canvas.requestPaint()
     }
 
-    onSpeedChanged: {
-        needleAngle = angleStart + ((speed - speedMin) / (speedMax - speedMin)) * (angleEnd - angleStart) + 90
+    onRpmChanged: {
+        needleAngle = angleStart + ((rpm - speedMin) / (speedMax - speedMin)) * (angleEnd - angleStart) + 90;
+        comConnector.changeRpmToOBD(rpm);
     }
 
     Component.onCompleted: {
@@ -152,7 +153,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 70
-        text: Math.round(speed)
+        text: Math.round(rpm)
         font.pixelSize: 30
         font.family: "Roboto"
         selectByMouse: true
@@ -161,9 +162,9 @@ Item {
 
         onTextChanged: {
             if (text > 15000) {
-                speed = 15000
+                rpm = 15000
             } else {
-                speed = text
+                rpm = text
             }
             text = text.replace(/[^0-9]/g, "")
             if (text.length > 1 && text[0] === "0") {
@@ -214,8 +215,8 @@ Item {
             repeat: true
             running: false
             onTriggered: {
-                speed = Math.min(speed + 25, speedMax)
-                rpm_text.text = Math.round(speed).toString()
+                rpm = Math.min(rpm + 25, speedMax)
+                rpm_text.text = Math.round(rpm).toString()
             }
         }
 
@@ -230,8 +231,8 @@ Item {
                 holdTimer.stop()
             }
             onClicked: {
-                speed = Math.min(speed + 25, speedMax)
-                rpm_text.text = Math.round(speed).toString()
+                rpm = Math.min(rpm + 25, speedMax)
+                rpm_text.text = Math.round(rpm).toString()
             }
         }
     }
@@ -272,8 +273,8 @@ Item {
             repeat: true
             running: false
             onTriggered: {
-                speed = Math.max(speed - 25, speedMin)
-                rpm_text.text = Math.round(speed).toString()
+                rpm = Math.max(rpm - 25, speedMin)
+                rpm_text.text = Math.round(rpm).toString()
             }
         }
 
@@ -288,8 +289,8 @@ Item {
                 decreaseTimer.stop()
             }
             onClicked: {
-                speed = Math.max(speed - 25, speedMin)
-                rpm_text.text = Math.round(speed).toString()
+                rpm = Math.max(rpm - 25, speedMin)
+                rpm_text.text = Math.round(rpm).toString()
             }
         }
     }
@@ -298,7 +299,7 @@ Item {
         id: rpmSlider
         from: speedMin
         to: speedMax
-        value: speed
+        value: rpm
         stepSize: 1
         anchors.left: parent.left
         anchors.leftMargin: 140
@@ -335,8 +336,8 @@ Item {
         }
 
         onValueChanged: {
-            speed = Math.round(value);
-            rpm_text.text = Math.round(speed).toString();
+            rpm = Math.round(value);
+            rpm_text.text = Math.round(rpm).toString();
         }
     }
 

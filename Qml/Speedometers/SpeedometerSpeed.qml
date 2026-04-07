@@ -158,9 +158,6 @@ Item {
         font.bold: true
     }
 
-
-
-
     TextEdit {
          id: kmh_text
         anchors.horizontalCenter: parent.horizontalCenter
