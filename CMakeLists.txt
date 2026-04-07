@@ -52,6 +52,8 @@ qt_add_qml_module(appObd2-Emulator
 
         Qml/assets/circle.png
         boxblur.frag
+        QML_FILES Qml/Speedometers/SpeedometerTemp.qml
+        QML_FILES Qml/Speedometers/SpeedometerVoltage.qml
 )
 
 
