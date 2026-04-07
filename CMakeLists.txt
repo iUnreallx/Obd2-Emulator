@@ -27,14 +27,16 @@ qt_add_qml_module(appObd2-Emulator
         Src/Source/SerialPortScanner.cpp
         Src/Source/SerialPortConnector.cpp
         Src/Source/SerialPortWorker.cpp
+        Src/Source/logger/OBD_Logger.cpp
         Src/Header/SerialPortScanner.h
         Src/Header/SerialPortConnector.h
         Src/Header/SerialPortWorker.h
+        Src/Header/logger/OBD_Logger.h
 
     RESOURCES
         Qml/assets/fonts/Ubuntu-Bold.ttf
         Qml/assets/fonts/Ubuntu-Regular.ttf
-        Qml/assets/car.jpg
+        Qml/assets/car.png
         Qml/assets/settings.png
         Qml/assets/question.png
         Qml/assets/next.png
@@ -45,7 +47,13 @@ qt_add_qml_module(appObd2-Emulator
         Qml/assets/ui/info.png
         Qml/assets/ui/power.png
         Qml/assets/ui/temp.png
+        Qml/assets/ui/reload.png
+        Qml/assets/ui/terminal.png
+
+        Qml/assets/circle.png
         boxblur.frag
+        QML_FILES Qml/Speedometers/SpeedometerTemp.qml
+        QML_FILES Qml/Speedometers/SpeedometerVoltage.qml
 )
 
 

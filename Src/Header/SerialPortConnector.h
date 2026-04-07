@@ -15,12 +15,14 @@ public:
 
     Q_INVOKABLE void openPort(const QString &portName);
     Q_INVOKABLE void closePort();
-    Q_INVOKABLE bool isPortOpen() const;
 
     Q_INVOKABLE void changeSpeedToOBD(int speed);
+    Q_INVOKABLE void changeRpmToOBD(int rpm);
+    Q_INVOKABLE void changeTempToOBD(int temp);
+    Q_INVOKABLE void changeVoltageToOBD(double voltage);
 
 signals:
-    void dataReceived(const QByteArray &data);
+    void connectionResult(bool success);
 
 private:
     QThread *workerThread;
